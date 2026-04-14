@@ -1,6 +1,7 @@
 package Lin.study.init;
 
 import Lin.study.Study;
+import Lin.study.block.machine.machine;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -29,9 +30,14 @@ public class ModBlocks {
     // RegisterObject 是注册对象
     // BlockBehaviour 是用于定义方块的行为
     // Properties 是上面的一个内部类,类似标签页的 builder
+    // 粗原料块
     public static final RegistryObject<Block> RAW_MATERIAL_BLOCK =
             registerBlock("raw_material_block",
                     () -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
+    // 机器
+    public static final RegistryObject<Block> MACHINE =
+            registerBlock("machine",
+                    machine::new);
 
     //通用方块注册方法
     // <T extends Block> 提前声明该函数内的泛型
