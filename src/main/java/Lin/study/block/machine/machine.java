@@ -1,18 +1,31 @@
 package Lin.study.block.machine;
 
+import Lin.study.blockentity.MachineEntity;
+import Lin.study.init.ModBlockEntities;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
 
 // HorizontalDirectionalBlock
 // 理解为提前设置好的方块模版,允许翻转和镜像等操作
-public class machine extends HorizontalDirectionalBlock {
+public class machine extends HorizontalDirectionalBlock implements EntityBlock {
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
     public machine() {
@@ -49,5 +62,39 @@ public class machine extends HorizontalDirectionalBlock {
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
         pBuilder.add(FACING);
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
+        return new MachineEntity(blockPos, blockState);
+    }
+
+    // getTicker 是用于告诉游戏在每一刻需要执行的逻辑
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState,
+                                                                  BlockEntityType<T> pBlockEntityType) {
+        // 这是一个三元运算符,用法:
+        // 条件? 结果1 : 结果2
+        // 完整写法是 if(条件){} else{}
+        return pBlockEntityType == ModBlockEntities.MACHINE_BE.get()
+                // 以下四个参数来源于 BlockEntityTicker 的 tick
+                // 这个 tick 明确要求了需要4个参数,哪怕不用也要接受
+                // 然后用匿名函数执行我们方块实体的 tick 方法
+                ? (lvl, p, st, be) -> ((MachineEntity) be).tick()
+                : null;
+    }
+
+    @Override
+    public InteractionResult use(BlockState state, Level level, BlockPos pos,
+                                 Player player, InteractionHand hand, BlockHitResult hit) {
+        if (!level.isClientSide()) {
+            BlockEntity entity = level.getBlockEntity(pos);
+            if (entity instanceof MachineEntity machine) {
+                player.sendSystemMessage(Component.literal(machine.getDebugMessage()));
+            }
+        }
+        return InteractionResult.sidedSuccess(level.isClientSide());
     }
 }
