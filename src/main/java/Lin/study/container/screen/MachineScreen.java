@@ -29,14 +29,16 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
     }
 
     @Override
+    // partialTick 是动画帧率
     protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
-        // 设置渲染使用的 Shader
+        // 设置渲染使用的 Shader (着色器)
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
 
         // 设置颜色
         RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
 
-        // 绑定要回执的纹理
+        // 绑定纹理
+        // pShaderTexture 指定纹理
         RenderSystem.setShaderTexture(0, GUI);
 
         // 计算 GUI 左上角的位置,使其界面居中

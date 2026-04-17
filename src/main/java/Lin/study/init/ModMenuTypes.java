@@ -11,20 +11,22 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+// 类似 BlockEntityType
 public class ModMenuTypes {
     public static final DeferredRegister<MenuType<?>> MENUS =
             DeferredRegister.create(ForgeRegistries.MENU_TYPES, Study.MODID);
 
-    // end region
     public static void register(IEventBus eventBus) {
         MENUS.register(eventBus);
     }    // region 注册区
 
     private static <T extends AbstractContainerMenu> RegistryObject<MenuType<T>> registerMenuType(
             String name, IContainerFactory<T> factory) {
+        // 将构造器引用包装成 Forge 能识别的工厂
         return MENUS.register(name, () -> IForgeMenuType.create(factory));
     }
 
+    // 注册 MachineMenu
     public static final RegistryObject<MenuType<MachineMenu>>
             MACHINE_MENU =
             registerMenuType("machine_menu",

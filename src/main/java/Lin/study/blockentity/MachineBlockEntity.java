@@ -17,6 +17,9 @@ import javax.annotation.Nullable;
 
 public class MachineBlockEntity extends BlockEntity implements MenuProvider {
     private int progress = 0;
+
+    // ContainerData 是一个整数数据接口,只接受整数
+    // 如果有其他类型则需要转换成整数
     protected final ContainerData data = new ContainerData() {
         @Override
         public int get(int pIndex) {
@@ -32,6 +35,7 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
         }
 
         @Override
+        // 返回可以允许访问的范围(0,return-1)
         public int getCount() {
             return 1;
         }
@@ -74,6 +78,8 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
     }
 
     // 当玩家打开界面时创建 Menu
+    // 关闭之后会自动销毁
+    // 意味 Menu 会包含临时数据
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {

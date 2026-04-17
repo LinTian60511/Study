@@ -9,6 +9,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
+// value = Dist.Client 的意思是只在客户端加载 ClientSetup 这个类
 @Mod.EventBusSubscriber (modid = Study.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientSetup {
 
@@ -17,6 +18,7 @@ public class ClientSetup {
         registerScreens();
     }
 
+    // 用于绑定 Menu 和 Screen
     private static void registerScreens() {
         MenuScreens.register(
                 ModMenuTypes.MACHINE_MENU.get(),

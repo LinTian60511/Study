@@ -94,16 +94,20 @@ public class machine extends HorizontalDirectionalBlock implements EntityBlock {
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos,
                                  Player player, InteractionHand hand, BlockHitResult hit) {
+        // 判断确保不是在客户端打开
         if (!level.isClientSide()) {
+            // 通过方块坐标指定方块实体
             BlockEntity entity = level.getBlockEntity(pos);
-            if (entity instanceof MachineBlockEntity juicer) {
-                NetworkHooks.openScreen((ServerPlayer) player, juicer, pos);
+            // 如果 entity 是 MachineBlockEntity ,那么则把它当作 machine 使用
+            // machine 只是一个局部变量
+            if (entity instanceof MachineBlockEntity machine) {
+                // 告诉服务端执行打开 Screen
+                NetworkHooks.openScreen((ServerPlayer) player, machine, pos);
             } else {
+                // entity 不是 MachineBlockEntity 类型则崩溃并提示
                 throw new IllegalStateException("Missing Container!");
             }
         }
         return InteractionResult.sidedSuccess(level.isClientSide());
     }
-
-    ;
 }
