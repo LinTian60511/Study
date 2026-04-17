@@ -1,9 +1,6 @@
 package Lin.study;
 
-import Lin.study.init.ModBlockEntities;
-import Lin.study.init.ModBlocks;
-import Lin.study.init.ModCreativeModeTabs;
-import Lin.study.init.ModItems;
+import Lin.study.init.*;
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -34,7 +31,8 @@ public class Study {
         ModItems.register(modEventBus);
         // 标签页注册
         ModCreativeModeTabs.register(modEventBus);
-
+        // 菜单界面
+        ModMenuTypes.register(modEventBus);
         // end region
 
         modEventBus.addListener(this::commonSetup);

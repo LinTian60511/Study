@@ -1,7 +1,7 @@
 package Lin.study.init;
 
 import Lin.study.Study;
-import Lin.study.blockentity.MachineEntity;
+import Lin.study.blockentity.MachineBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -19,11 +19,11 @@ public class ModBlockEntities {
         BLOCK_ENTITY.register(eventBus);
     }
 
-    public static final RegistryObject<BlockEntityType<MachineEntity>>
+    public static final RegistryObject<BlockEntityType<MachineBlockEntity>>
             MACHINE_BE =
             BLOCK_ENTITY.register("machine_be", () ->
                     BlockEntityType.Builder.of(
-                            MachineEntity::new,// 方法引用
+                            MachineBlockEntity::new,// 方法引用
                             ModBlocks.MACHINE.get()// 可以接受多个参数
                     ).build(null)
             );

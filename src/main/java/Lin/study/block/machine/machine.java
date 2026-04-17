@@ -1,10 +1,10 @@
 package Lin.study.block.machine;
 
-import Lin.study.blockentity.MachineEntity;
+import Lin.study.blockentity.MachineBlockEntity;
 import Lin.study.init.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
@@ -67,10 +68,14 @@ public class machine extends HorizontalDirectionalBlock implements EntityBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
-        return new MachineEntity(blockPos, blockState);
+        return new MachineBlockEntity(blockPos, blockState);
     }
 
     // getTicker 是用于告诉游戏在每一刻需要执行的逻辑
+    // getTicker 是一个通用方法
+    // 当方块被加载的时候,游戏会调用方块的 getTicker ,该函数的作用是提交该方块的每tick逻辑
+    // 我们指定了函数要求返回 BlockEntityTicker ,这是一个接口,内部是一个抽象方法
+    // 函数的四个参数来源于 BlockEntityTicker 的 tick 函数,此函数要求四个参数
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState,
@@ -79,10 +84,10 @@ public class machine extends HorizontalDirectionalBlock implements EntityBlock {
         // 条件? 结果1 : 结果2
         // 完整写法是 if(条件){} else{}
         return pBlockEntityType == ModBlockEntities.MACHINE_BE.get()
-                // 以下四个参数来源于 BlockEntityTicker 的 tick
-                // 这个 tick 明确要求了需要4个参数,哪怕不用也要接受
-                // 然后用匿名函数执行我们方块实体的 tick 方法
-                ? (lvl, p, st, be) -> ((MachineEntity) be).tick()
+                // 因为 BlockEntityTicker 内部只有一个抽象方法,因此匿名函数直接默认为 tick
+                // 因为 BlockEntityTicker 内部的 tick 并没有实现,因此我们在匿名函数为他加上实现
+                // 因为我们不能确认传入的方块实体是否是正确的实体类型,因此需要进行转换
+                ? (lvl, p, st, be) -> ((MachineBlockEntity) be).tick()
                 : null;
     }
 
@@ -91,10 +96,14 @@ public class machine extends HorizontalDirectionalBlock implements EntityBlock {
                                  Player player, InteractionHand hand, BlockHitResult hit) {
         if (!level.isClientSide()) {
             BlockEntity entity = level.getBlockEntity(pos);
-            if (entity instanceof MachineEntity machine) {
-                player.sendSystemMessage(Component.literal(machine.getDebugMessage()));
+            if (entity instanceof MachineBlockEntity juicer) {
+                NetworkHooks.openScreen((ServerPlayer) player, juicer, pos);
+            } else {
+                throw new IllegalStateException("Missing Container!");
             }
         }
         return InteractionResult.sidedSuccess(level.isClientSide());
     }
+
+    ;
 }
