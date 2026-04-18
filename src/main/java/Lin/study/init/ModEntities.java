@@ -4,6 +4,7 @@ import Lin.study.Study;
 import Lin.study.entity.SimpleEntity;
 import Lin.study.entity.SimpleMoveableEntity;
 import Lin.study.entity.SimpleRideableEntity;
+import Lin.study.entity.SimpleShootableEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -39,6 +40,13 @@ public class ModEntities {
                     () -> EntityType.Builder.<SimpleMoveableEntity>of(SimpleMoveableEntity::new, MobCategory.CREATURE)
                             .sized(0.8f, 0.8f)
                             .build("simple_moveable_entity"));
+
+    // 简单可发射实体
+    public static final RegistryObject<EntityType<SimpleShootableEntity>> SIMPLE_SHOOTABLE_ENTITY =
+            ENTITIES.register("simple_shootable_entity",
+                    () -> EntityType.Builder.<SimpleShootableEntity>of(SimpleShootableEntity::new, MobCategory.CREATURE)
+                            .sized(0.8f, 0.8f)
+                            .build("simple_shootable_entity"));
 
     public static void register(IEventBus eventBus) {
         ENTITIES.register(eventBus);

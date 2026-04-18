@@ -25,5 +25,7 @@ public class ModEvents {
         event.put(ModEntities.SIMPLE_RIDEABLE_ENTITY.get(), SimpleEntity.createAttributes().build());
         // SimpleMoveableEntity
         event.put(ModEntities.SIMPLE_MOVEABLE_ENTITY.get(), SimpleMoveableEntity.createAttributes().build());
+        // SimpleShootableEntity
+        event.put(ModEntities.SIMPLE_SHOOTABLE_ENTITY.get(), SimpleEntity.createAttributes().build());
     }
 }

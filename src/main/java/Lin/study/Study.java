@@ -1,6 +1,7 @@
 package Lin.study;
 
 import Lin.study.init.*;
+import Lin.study.network.Networking;
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -35,6 +36,8 @@ public class Study {
         ModMenuTypes.register(modEventBus);
         // 实体注册
         ModEntities.register(modEventBus);
+        // 网络注册
+        Networking.register();
         // end region
 
         modEventBus.addListener(this::commonSetup);

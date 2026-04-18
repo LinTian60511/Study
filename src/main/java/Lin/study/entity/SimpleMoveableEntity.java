@@ -45,7 +45,7 @@ public class SimpleMoveableEntity extends SimpleRideableEntity {
             return;
         }
 
-        // 关键！使用玩家的朝向，而不是实体的朝向
+        // 朝向
         float yaw = player.getYRot();
 
         // 计算移动向量

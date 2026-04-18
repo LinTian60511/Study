@@ -4,6 +4,7 @@ import Lin.study.Study;
 import Lin.study.client.renderer.SimpleEntityRenderer;
 import Lin.study.client.renderer.SimpleMoveableEntityRenderer;
 import Lin.study.client.renderer.SimpleRideableEntityRenderer;
+import Lin.study.client.renderer.SimpleShootableEntityRenderer;
 import Lin.study.container.screen.MachineScreen;
 import Lin.study.init.ModEntities;
 import Lin.study.init.ModMenuTypes;
@@ -40,5 +41,7 @@ public class ClientSetup {
         EntityRenderers.register(ModEntities.SIMPLE_RIDEABLE_ENTITY.get(), SimpleRideableEntityRenderer::new);
         // SimpleMoveableEntity
         EntityRenderers.register(ModEntities.SIMPLE_MOVEABLE_ENTITY.get(), SimpleMoveableEntityRenderer::new);
+        // SimpleShootableEntity
+        EntityRenderers.register(ModEntities.SIMPLE_SHOOTABLE_ENTITY.get(), SimpleShootableEntityRenderer::new);
     }
 }
