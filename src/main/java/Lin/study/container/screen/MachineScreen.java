@@ -56,4 +56,17 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
         // 调用父类渲染 GUI 元素
         super.render(graphics, mouseX, mousY, partialTick);
     }
+
+    // 和构造方法不同的是,构造方法用于定义 Screen 的基础参数
+    // 而 init 用于负责 GUI 打开时候的布局初始化
+    @Override
+    protected void init() {
+        super.init();
+
+        // inventoryLabelX/Y 控制玩家背包标题的 X/Y 位置
+        // titleLabelX/Y 控制GUI标题的 X/Y 位置
+        // imageWidth/Heigh 控制 GUI 的时机宽度/高度
+        this.inventoryLabelX = 8;
+        this.inventoryLabelY = 81;
+    }
 }

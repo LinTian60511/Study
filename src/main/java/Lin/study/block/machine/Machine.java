@@ -26,10 +26,10 @@ import javax.annotation.Nullable;
 
 // HorizontalDirectionalBlock
 // 理解为提前设置好的方块模版,允许翻转和镜像等操作
-public class machine extends HorizontalDirectionalBlock implements EntityBlock {
+public class Machine extends HorizontalDirectionalBlock implements EntityBlock {
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
-    public machine() {
+    public Machine() {
         // super 是调用父类的构造方法
         // .of() 直接返回一个全新的实例化对象
         super(Properties.of());
@@ -109,5 +109,24 @@ public class machine extends HorizontalDirectionalBlock implements EntityBlock {
             }
         }
         return InteractionResult.sidedSuccess(level.isClientSide());
+    }
+
+    // 重写被移除的方法
+    @Override
+    public void onRemove(BlockState pState, Level pLvel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
+        // 只有当旧方块与新方块不是一个方块的时候,说明该方块被替换或者破坏了
+        // 因为有德方块状态变化的时候也有可能会触发,因此需要进行类型判断
+        if (pState.getBlock() != pNewState.getBlock()) {
+            // 去除当前位置的 BlockEntity
+            BlockEntity blockEntity = pLvel.getBlockEntity(pPos);
+
+            // 如果是该 Machine 的BlockEntity ,执行掉落逻辑
+            if (blockEntity instanceof MachineBlockEntity Machine) {
+                Machine.drops();
+            }
+
+            // 保留父类逻辑
+            super.onRemove(pState, pLvel, pPos, pNewState, pIsMoving);
+        }
     }
 }

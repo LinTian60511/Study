@@ -1,7 +1,7 @@
 package Lin.study.init;
 
 import Lin.study.Study;
-import Lin.study.block.machine.machine;
+import Lin.study.block.machine.Machine;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -37,7 +37,7 @@ public class ModBlocks {
     // 机器
     public static final RegistryObject<Block> MACHINE =
             registerBlock("machine",
-                    machine::new);
+                    Machine::new);
 
     //通用方块注册方法
     // <T extends Block> 提前声明该函数内的泛型

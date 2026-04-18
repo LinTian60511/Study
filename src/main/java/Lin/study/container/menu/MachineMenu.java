@@ -6,22 +6,22 @@ import Lin.study.init.ModMenuTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.SlotItemHandler;
 
 public class MachineMenu extends AbstractContainerMenu {
 
+    // 输入槽
+    private static final int INPUT_SLOT = 0;
+    private static final int OUTPUT_SLOT = 1;
     // 菜单绑定的方块
     public final MachineBlockEntity blockEntity;
-
     // 当前菜单所在的世界
     private final Level level;
-
     // 数据接口
     private final ContainerData data;
 
@@ -38,7 +38,7 @@ public class MachineMenu extends AbstractContainerMenu {
                 new SimpleContainerData(1));// pSize是这个容器的大小
     }
 
-    // 服务端构造器
+    // 通用构造器
     // 用于直接访问内存中的 BlockEntity 里的数据
     public MachineMenu(int id, Inventory inv, BlockEntity entity, ContainerData data) {
         // 指定菜单对应的 MenuType
@@ -56,12 +56,51 @@ public class MachineMenu extends AbstractContainerMenu {
         // 保存数据同步容器
         this.data = data;
 
+        // 添加玩家背包与快捷栏
+        addPlayerInventory(inv, 8, 92);
+        addPlayerHotbar(inv, 8, 150);
+        addMachineSlots(blockEntity.getItemHandler());
+
         // 注册数据同步槽
         // 来自于 AbstractContainerMenu
         // 遍历 data 中的每一个数据,并为每一个数据创建一个 DataSlot 用于同步
         // 并且将 DataSlot 注册进Menu的同步系统
         // 用于同步客户端和服务端的数据
         addDataSlots(data);
+    }
+
+    // 添加槽位
+    // handler 是机器内部库存
+    // 坐标是用于定位到 GUI 对应的位置
+    private void addMachineSlots(IItemHandler handler) {
+        this.addSlot(new SlotItemHandler(handler, INPUT_SLOT, 77, 38));
+        this.addSlot(new SlotItemHandler(handler, OUTPUT_SLOT, 142, 38));
+    }
+
+    // 玩家背包槽位
+    private void addPlayerInventory(Inventory inv, int leftCol, int topRow) {
+        for (int row = 0; row < 3; ++row) { // 对应背包的3行
+            for (int col = 0; col < 9; ++col) {// 对应背包的9列
+                this.addSlot(new Slot(
+                        inv,// 玩家背包
+                        col + row * 9 + 9,// 背包槽位索引值
+                        leftCol + col * 18,// 屏幕的X坐标
+                        topRow + row * 18// 屏幕的Y坐标
+                ));
+            }
+        }
+    }
+
+    // 玩家快捷栏槽位
+    private void addPlayerHotbar(Inventory inv, int leftCol, int topRow) {
+        for (int col = 0; col < 9; ++col) {
+            this.addSlot(new Slot(
+                    inv,
+                    col,
+                    leftCol + col * 18,
+                    topRow
+            ));
+        }
     }
 
     // shift快速点击逻辑

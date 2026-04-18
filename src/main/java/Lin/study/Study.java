@@ -33,6 +33,8 @@ public class Study {
         ModCreativeModeTabs.register(modEventBus);
         // 菜单界面
         ModMenuTypes.register(modEventBus);
+        // 实体注册
+        ModEntities.register(modEventBus);
         // end region
 
         modEventBus.addListener(this::commonSetup);
@@ -41,7 +43,6 @@ public class Study {
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
+
     }
-
-
 }
