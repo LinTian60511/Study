@@ -31,4 +31,9 @@ public class ModMenuTypes {
             MACHINE_MENU =
             registerMenuType("machine_menu",
                     MachineMenu::new);
+    // 注册 StorableEntityMenu
+    public static final RegistryObject<MenuType<MachineMenu>>
+            STORABLE_ENTITY_MENU =
+            registerMenuType("storable_entity_menu",
+                    MachineMenu::new);
 }

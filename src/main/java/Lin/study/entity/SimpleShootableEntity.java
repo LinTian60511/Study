@@ -9,7 +9,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.Arrow;
+import net.minecraft.world.entity.projectile.SmallFireball;
 import net.minecraft.world.level.Level;
 
 public class SimpleShootableEntity extends SimpleMoveableEntity {
@@ -44,7 +44,7 @@ public class SimpleShootableEntity extends SimpleMoveableEntity {
     public void shoot(Player shooter) {
         if (!this.level().isClientSide && cooldown == 0) {
             // 创建箭
-            Arrow arrow = new Arrow(this.level(), shooter);
+            SmallFireball arrow = new SmallFireball(EntityType.SMALL_FIREBALL, this.level());
 
             double offset = this.getBbWidth() * 0.8;
             double x = this.getX() + this.getLookAngle().x * offset;
@@ -54,7 +54,7 @@ public class SimpleShootableEntity extends SimpleMoveableEntity {
 
             arrow.shoot(this.getLookAngle().x, this.getLookAngle().y, this.getLookAngle().z,
                     1.5f, 1.0f);
-            arrow.setBaseDamage(2.0);
+            //arrow.setBaseDamage(2.0);
 
             this.level().addFreshEntity(arrow);
             this.level().playSound(null, this.getX(), this.getY(), this.getZ(),

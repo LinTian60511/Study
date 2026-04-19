@@ -24,7 +24,7 @@ public class ShootPacket {
     // 处理逻辑
     public void handle(Supplier<NetworkEvent.Context> contextSupplier) {
         NetworkEvent.Context context = contextSupplier.get();
-        context.enqueueWork(() -> {
+        context.enqueueWork(() -> { // 确保在主线程运行
             // 获取发送包的玩家
             ServerPlayer player = context.getSender();
             if (player != null && player.getVehicle() instanceof SimpleShootableEntity vehicle) {
